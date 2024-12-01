@@ -91,6 +91,7 @@ export const createAddTaskModal = () => {
         createToast("✅ Task created");
         form.reset();
         document.getElementById("task-grid").appendChild(createCard(task));
+        helper.updateTracker();
     });
 
     return createModal("Add New Task", form);
@@ -377,6 +378,7 @@ export const viewCardDetails = (
         helper.removeTask(obj.id);
         createToast("✅ Removed Task");
 
+        helper.updateTracker();
         const backdrop = document.getElementById("modal");
         backdrop.click();
     });
@@ -453,6 +455,7 @@ export const createCheckmarkButton = (completed, obj) => {
 
         button.textContent = result ? "✓" : "";
         helper.reRenderTask(obj.id);
+        helper.updateTracker();
     });
 
     return button;

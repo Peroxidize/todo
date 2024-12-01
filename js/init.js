@@ -53,3 +53,4 @@ search.addEventListener("keydown", (e) => {
 });
 
 helper.renderTasks(task_grid);
+helper.updateTracker();

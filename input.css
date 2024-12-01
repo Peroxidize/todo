@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --work: -100%;
+    --personal: -100%;
+    --shopping: -100%;
+}
+
 select {
     appearance: none;
 }
@@ -135,4 +141,16 @@ select {
  
 .card-leave {
     animation: card-leave 0.3s ease-in forwards;
+}
+
+.work-progressbar {
+    transform: translateX(var(--work));
+}
+
+.personal-progressbar {
+    transform: translateX(var(--personal));
+}
+
+.shopping-progressbar {
+    transform: translateX(var(--shopping));
 }

@@ -123,7 +123,54 @@ export const filterTask = (filters) => {
     return hideFilteredTask(filtered_tasks);
 };
 
-export const hideFilteredTask = (tasks) => {
+export const updateTracker = () => {
+    const progress = calculateProgress();
+    const work_text = document.getElementById("work-text");
+    const personal_text = document.getElementById("personal-text");
+    const shopping_text = document.getElementById("shopping-text");
+
+    work_text.textContent = progress[0].toFixed() + "% Complete";
+    personal_text.textContent = progress[1].toFixed() + "% Complete";
+    shopping_text.textContent = progress[2].toFixed() + "% Complete";
+
+    document.documentElement.style.setProperty("--work", `${-100 + progress[0]}%`);
+    document.documentElement.style.setProperty("--personal", `${-100 + progress[1]}%`);
+    document.documentElement.style.setProperty("--shopping", `${-100 + progress[2]}%`);
+};
+
+const calculateProgress = () => {
+    const progress = [];
+    const tasks = getTasks();
+
+    const work_count = getCount("Work", tasks);
+    const work_completed = getCompletedCount("Work", tasks);
+    const personal_count = getCount("Personal", tasks);
+    const personal_completed = getCompletedCount("Personal", tasks);
+    const shopping_count = getCount("Shopping", tasks);
+    const shopping_completed = getCompletedCount("Shopping", tasks);
+
+    progress.push(work_completed === 0 ? 0 : work_completed / work_count);
+    progress.push(
+        personal_completed === 0 ? 0 : personal_completed / personal_count
+    );
+    progress.push(
+        shopping_completed === 0 ? 0 : shopping_completed / shopping_count
+    );
+
+    return progress.map((num) => num * 100);
+};
+
+const getCount = (category, tasks) => {
+    return tasks.filter((task) => task.select_category === category).length;
+};
+
+const getCompletedCount = (category, tasks) => {
+    return tasks.filter(
+        (task) => task.select_category === category && task.completed
+    ).length;
+};
+
+const hideFilteredTask = (tasks) => {
     const nodes = document.getElementById("task-grid").childNodes;
 
     nodes.forEach(async (node) => {
@@ -142,7 +189,7 @@ export const hideFilteredTask = (tasks) => {
     });
 };
 
-function includeTask(filter, category, task) {
+const includeTask = (filter, category, task) => {
     if (filter.includes("All") || filter === "") {
         return true;
     }
@@ -157,4 +204,4 @@ function includeTask(filter, category, task) {
         case "search":
             return task.title.toLowerCase().includes(filter);
     }
-}
+};
