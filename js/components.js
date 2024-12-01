@@ -244,6 +244,9 @@ export const createCard = (obj) => {
     const card = document.createElement("div");
     card.id = obj.id;
     card.setAttribute("name", obj.title);
+    card.setAttribute("category", obj.select_priority);
+    card.setAttribute("priority", obj.select_priority);
+    card.setAttribute("complete", obj.completed);
     card.classList = "rounded-lg border shadow-sm mb-4 p-6 card-enter";
     card.classList +=
         helper.compareDates(obj.date) && !obj.completed

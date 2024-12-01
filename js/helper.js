@@ -93,3 +93,68 @@ export const reRenderTask = (id) => {
 
     node.replaceWith(new_node);
 };
+
+export const renderTasks = async (task_grid) => {
+    assert(!task_grid);
+
+    const tasks = getTasks();
+
+    if (tasks) {
+        task_grid.innerHTML = "";
+        for (const task of tasks) {
+            task_grid.appendChild(components.createCard(task));
+            await delay(300);
+        }
+    }
+};
+
+export const filterTask = (filters) => {
+    const tasks = getTasks();
+
+    const filtered_tasks = tasks.filter((task) => {
+        return (
+            includeTask(filters[0], "category", task) &&
+            includeTask(filters[1], "priority", task) &&
+            includeTask(filters[2], "completed", task) &&
+            includeTask(filters[3], "search", task)
+        );
+    });
+
+    return hideFilteredTask(filtered_tasks);
+};
+
+export const hideFilteredTask = (tasks) => {
+    const nodes = document.getElementById("task-grid").childNodes;
+
+    nodes.forEach(async (node) => {
+        const id = node.getAttribute("id");
+
+        if (tasks.some((task) => task.id === Number(id))) {
+            node.classList.remove("hidden");
+            node.classList.remove("card-leave");
+            node.classList.add("card-enter");
+            await delay(400);
+        } else {
+            node.classList.add("card-leave");
+            await delay(400);
+            node.classList.add("hidden");
+        }
+    });
+};
+
+function includeTask(filter, category, task) {
+    if (filter.includes("All") || filter === "") {
+        return true;
+    }
+
+    switch (category) {
+        case "category":
+            return task.select_category === filter;
+        case "priority":
+            return task.select_priority === filter;
+        case "completed":
+            return task.completed === (filter === "Completed" ? true : false);
+        case "search":
+            return task.title.toLowerCase().includes(filter);
+    }
+}

@@ -3,6 +3,8 @@ import * as helper from "./helper.js";
 
 let timeout;
 
+const filters = ["All Categories", "All Priority", "All Tasks", ""];
+
 const body = document.querySelector("body");
 const create_task = document.getElementById("create-task");
 const select_grid = document.getElementById("select-grid");
@@ -22,43 +24,32 @@ const select_category = document.getElementById("category");
 const select_priorities = document.getElementById("priorities");
 const select_tasks = document.getElementById("tasks");
 
+select_category.addEventListener("change", (e) => {
+    filters[0] = select_category.value;
+    helper.filterTask(filters);
+});
+
+select_priorities.addEventListener("change", (e) => {
+    filters[1] = select_priorities.value;
+    helper.filterTask(filters);
+});
+
+select_tasks.addEventListener("change", (e) => {
+    filters[2] = select_tasks.value;
+    helper.filterTask(filters);
+});
+
 create_task.addEventListener("click", (e) => {
-    body.appendChild(components.createAddTaskModal());
+    task_grid.appendChild(components.createAddTaskModal());
 });
 
 search.addEventListener("keydown", (e) => {
     clearTimeout(timeout);
 
     timeout = setTimeout(() => {
-        const tasks = document.getElementById("task-grid").childNodes;
-        tasks.forEach((task) => {
-            const title = task.getAttribute("name");
-
-            if (!title.includes(search.value)) {
-                task.classList.add("card-leave");
-                task.classList.remove("card-enter");
-                setTimeout(() => {
-                    task.classList.add("hidden");
-                }, 400);
-            } else {
-                task.classList.remove("card-leave");
-                task.classList.remove("hidden");
-                task.classList.add("card-enter");
-            }
-        });
+        filters[3] = search.value;
+        helper.filterTask(filters);
     }, 200);
 });
 
-export const renderTasks = async () => {
-    const tasks = helper.getTasks();
-
-    if (tasks) {
-        task_grid.innerHTML = "";
-        for (const task of tasks) {
-            task_grid.appendChild(components.createCard(task));
-            await helper.delay(300);
-        }
-    }
-};
-
-renderTasks();
+helper.renderTasks(task_grid);
