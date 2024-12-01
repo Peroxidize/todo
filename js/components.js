@@ -1,8 +1,13 @@
 import * as helper from "./helper.js";
-import * as init from "./init.js";
 
 // this javascript file serves as for creating components
 
+/**
+ * Creates a button element with specified text content and ID.
+ * @param {string} text - The text displayed on the button.
+ * @param {string} id - The unique ID to assign to the button.
+ * @returns {HTMLButtonElement} The created button element.
+ */
 export const createButton = (text, id) => {
     helper.assert(!text, "Failed creating button");
     helper.assert(!id, "Failed creating button");
@@ -16,6 +21,12 @@ export const createButton = (text, id) => {
     return element;
 };
 
+/**
+ * Creates an input field element with a specified placeholder and ID.
+ * @param {string} placeholder - The placeholder text for the input field.
+ * @param {string} id - The unique ID to assign to the input field.
+ * @returns {HTMLInputElement} The created input field element.
+ */
 export const createInput = (placeholder, id) => {
     helper.assert(!placeholder, "Failed creating button");
     helper.assert(!id, "Failed creating button");
@@ -29,6 +40,11 @@ export const createInput = (placeholder, id) => {
     return element;
 };
 
+/**
+ * Creates and returns the "Add Task" modal, including all relevant input fields and functionality.
+ * This modal allows users to create a new task with properties such as title, description, category, priority, and due date.
+ * @returns {HTMLDivElement} The modal containing the "Add Task" form.
+ */
 export const createAddTaskModal = () => {
     const form = document.createElement("form");
     form.classList = "space-y-4";
@@ -68,6 +84,7 @@ export const createAddTaskModal = () => {
     form.appendChild(date);
     form.appendChild(button);
 
+    // Event listener for form submission to add the task
     button.addEventListener("click", (e) => {
         if (!form.checkValidity()) {
             return;
@@ -97,6 +114,12 @@ export const createAddTaskModal = () => {
     return createModal("Add New Task", form);
 };
 
+/**
+ * Creates a modal container with a specified title and content.
+ * @param {string} title - The title displayed at the top of the modal.
+ * @param {HTMLElement} content - The content to be displayed inside the modal.
+ * @returns {HTMLDivElement} The created modal element.
+ */
 export const createModal = (title, content) => {
     helper.assert(!title, "empty title");
     helper.assert(!content, "empty content");
@@ -146,6 +169,7 @@ export const createModal = (title, content) => {
     modalHeader.appendChild(closeButton);
     modalContainer.appendChild(content);
 
+    // Close modal on background or button click with animations
     function setAnimation() {
         parentDiv.classList.remove("backdrop-enter");
         modalContainer.classList.remove("modal-enter");
@@ -172,6 +196,7 @@ export const createModal = (title, content) => {
     return parentDiv;
 };
 
+// This function create a select with options, given a list of options and id
 export const createSelect = (list, id) => {
     helper.assert(!list, "Failed creating select");
     helper.assert(!id, "Failed creating select");
@@ -212,6 +237,7 @@ export const createSelect = (list, id) => {
     return parentDiv;
 };
 
+// This function creates a toast on the screen given a text
 export const createToast = (content) => {
     helper.assert(!content);
 
@@ -238,6 +264,7 @@ export const createToast = (content) => {
     handleToast(toast);
 };
 
+// This function create Task Card given a task object
 export const createCard = (obj) => {
     helper.assert(!obj, "undefined obj");
 
@@ -325,6 +352,7 @@ export const createCard = (obj) => {
     return card;
 };
 
+// This function creates a modal for the task given the task information
 export const viewCardDetails = (
     header,
     description,
@@ -389,6 +417,7 @@ export const viewCardDetails = (
     button_wrapper2.appendChild(close_button);
     button_wrapper2.appendChild(delete_button);
 
+    // Append all cloned elements and buttons to the wrapper
     wrapper.appendChild(cloned_header);
     wrapper.appendChild(cloned_description);
     wrapper.appendChild(cloned_category);
@@ -399,6 +428,7 @@ export const viewCardDetails = (
     return wrapper;
 };
 
+// This function creates a pill badge for task priority
 export const createPill = (priority) => {
     helper.assert(!priority, "undefined priority");
 
@@ -421,6 +451,7 @@ export const createPill = (priority) => {
     return pill;
 };
 
+// This function creates a light-styled button
 export const createLightButton = (text) => {
     helper.assert(!text, "undefined text");
 
@@ -432,6 +463,7 @@ export const createLightButton = (text) => {
     return button;
 };
 
+// This function creates a danger-styled button for destructive actions
 export const createDangerButton = (text) => {
     helper.assert(!text, "undefined text");
 
@@ -443,6 +475,7 @@ export const createDangerButton = (text) => {
     return button;
 };
 
+// This function creates a button to toggle the completion status of a task
 export const createCheckmarkButton = (completed, obj) => {
     helper.assert(completed === undefined);
 

@@ -23,6 +23,7 @@
                     class="mb-4 rounded-md border border-transparent bg-slate-900 px-4 py-2 text-center text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-slate-800 hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-600 active:shadow-none disabled:pointer-events-none disabled:opacity-90 disabled:shadow-none"
                     type="button"
                     id="create-task"
+                    aria-label="Add a new task"
                 >
                     Add New Task
                 </button>
@@ -34,18 +35,24 @@
                         class="ease mb-4 w-full rounded-md border border-slate-200 bg-transparent px-3 py-3 text-sm text-slate-700 shadow-sm transition duration-300 placeholder:text-slate-400 hover:border-slate-300 focus:border-slate-400 focus:shadow focus:outline-none"
                         input="text"
                         placeholder="Search tasks..."
-                        aria-label="Task filter field"
+                        aria-label="Search tasks field"
                     />
                 </div>
                 <div
                     id="select-grid"
                     class="mb-4 grid grid-cols-3 gap-4 max-[480px]:grid-cols-1"
+                    aria-label="Task category selection grid"
                 ></div>
                 <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
-                    <div id="task-grid" class="md:col-span-2"></div>
+                    <div
+                        id="task-grid"
+                        class="md:col-span-2"
+                        aria-label="Task list grid"
+                    ></div>
                     <div>
                         <div
                             class="rounded-md border border-gray-200 p-4 shadow-sm"
+                            aria-label="Progress tracker section"
                         >
                             <h1 class="mb-4 text-2xl font-semibold">
                                 Progress Tracker
@@ -54,12 +61,14 @@
                             <div
                                 class="mb-1 h-4 w-full overflow-hidden rounded-full bg-gray-100"
                                 role="progressbar"
+                                aria-label="Work progress bar"
                                 aria-valuemin="0"
                                 aria-valuemax="100"
+                                aria-valuenow="0"
                             >
                                 <div
                                     id="work-progressbar"
-                                    class="h-full w-full rounded-full bg-black transition-all work-progressbar"
+                                    class="work-progressbar h-full w-full rounded-full bg-black transition-all"
                                 ></div>
                             </div>
                             <p
@@ -72,12 +81,14 @@
                             <div
                                 class="mb-1 h-4 w-full overflow-hidden rounded-full bg-gray-100"
                                 role="progressbar"
+                                aria-label="Personal progress bar"
                                 aria-valuemin="0"
                                 aria-valuemax="100"
+                                aria-valuenow="0"
                             >
                                 <div
                                     id="personal-progressbar"
-                                    class="h-full w-full rounded-full bg-black transition-all personal-progressbar"
+                                    class="personal-progressbar h-full w-full rounded-full bg-black transition-all"
                                 ></div>
                             </div>
                             <p
@@ -90,12 +101,14 @@
                             <div
                                 class="mb-1 h-4 w-full overflow-hidden rounded-full bg-gray-100"
                                 role="progressbar"
+                                aria-label="Shopping progress bar"
                                 aria-valuemin="0"
                                 aria-valuemax="100"
+                                aria-valuenow="0"
                             >
                                 <div
                                     id="shopping-progressbar"
-                                    class="h-full w-full rounded-full bg-black transition-all shopping-progressbar"
+                                    class="shopping-progressbar h-full w-full rounded-full bg-black transition-all"
                                 ></div>
                             </div>
                             <p

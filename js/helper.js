@@ -1,11 +1,16 @@
+// This javascript is responsible for the creation of helper function
+// that are used in other javascript files
+
 import * as components from "./components.js";
 
+// Assertion function to validate conditions; throws an error if the condition is true
 export const assert = (condition, message) => {
     if (condition) {
         throw new Error(message || "Assertion failed!");
     }
 };
 
+// Function to add a task object to localStorage
 export const addToLocalStorage = (obj) => {
     assert(!obj, "object must non-empty");
 
@@ -16,10 +21,12 @@ export const addToLocalStorage = (obj) => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
 };
 
+// Function to clear all data from localStorage
 export const clearLocalStorage = () => {
     localStorage.clear();
 };
 
+// Function to remove a toast notification element from the DOM
 export const removeToast = () => {
     const toast = document.getElementById("toast");
 
@@ -34,9 +41,10 @@ export const removeToast = () => {
     }
 };
 
-// Helper function to create a delay
+// Helper function to create a delay for asynchronous operations
 export const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+// Function to compare a given date with the current date
 export const compareDates = (date) => {
     assert(!date, "undefined date");
 
@@ -48,6 +56,7 @@ export const compareDates = (date) => {
     return taskDate < dateNow;
 };
 
+// Function to toggle a task's completion status
 export const setCompleted = (id) => {
     assert(!id);
     console.log(id);
@@ -61,6 +70,7 @@ export const setCompleted = (id) => {
     return task.completed;
 };
 
+// Function to remove a task from localStorage by ID
 export const removeTask = (id) => {
     assert(!id);
 
@@ -70,6 +80,7 @@ export const removeTask = (id) => {
     localStorage.setItem("tasks", JSON.stringify(new_tasks));
 };
 
+// Function to retrieve a specific task by ID from localStorage
 export const getTask = (id) => {
     assert(!id);
 
@@ -79,10 +90,12 @@ export const getTask = (id) => {
     return task;
 };
 
+// Function to retrieve all tasks from localStorage
 export const getTasks = () => {
     return JSON.parse(localStorage.getItem("tasks"));
 };
 
+// Function to re-render a specific task card in the UI
 export const reRenderTask = (id) => {
     assert(!id);
 
@@ -94,6 +107,7 @@ export const reRenderTask = (id) => {
     node.replaceWith(new_node);
 };
 
+// Function to render all tasks in the task grid
 export const renderTasks = async (task_grid) => {
     assert(!task_grid);
 
@@ -108,6 +122,7 @@ export const renderTasks = async (task_grid) => {
     }
 };
 
+// Function to filter tasks based on selected filters
 export const filterTask = (filters) => {
     const tasks = getTasks();
 
@@ -123,6 +138,7 @@ export const filterTask = (filters) => {
     return hideFilteredTask(filtered_tasks);
 };
 
+// Function to update the progress tracker in the UI
 export const updateTracker = () => {
     const progress = calculateProgress();
     const work_text = document.getElementById("work-text");
@@ -138,6 +154,7 @@ export const updateTracker = () => {
     document.documentElement.style.setProperty("--shopping", `${-100 + progress[2]}%`);
 };
 
+// Function to calculate the progress percentage for each task category
 const calculateProgress = () => {
     const progress = [];
     const tasks = getTasks();
@@ -160,16 +177,19 @@ const calculateProgress = () => {
     return progress.map((num) => num * 100);
 };
 
+// Function to count tasks in a specific category
 const getCount = (category, tasks) => {
     return tasks.filter((task) => task.select_category === category).length;
 };
 
+// Function to count completed tasks in a specific category
 const getCompletedCount = (category, tasks) => {
     return tasks.filter(
         (task) => task.select_category === category && task.completed
     ).length;
 };
 
+// Function to hide tasks that do not match the filtered results
 const hideFilteredTask = (tasks) => {
     const nodes = document.getElementById("task-grid").childNodes;
 
@@ -189,6 +209,7 @@ const hideFilteredTask = (tasks) => {
     });
 };
 
+// Function to check if a task matches the current filter
 const includeTask = (filter, category, task) => {
     if (filter.includes("All") || filter === "") {
         return true;
