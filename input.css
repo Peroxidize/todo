@@ -77,6 +77,29 @@ select {
     }
 }
 
+/* Card animations */
+@keyframes card-enter {
+    from {
+        transform: translateX(-5rem); 
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes card-leave {
+    from {
+        transform: translateX(0); 
+        opacity: 1;
+    }
+    to {
+        transform: translateX(5rem);
+        opacity: 0;
+    }
+}
+
 /* Applying the animations */
 .backdrop-enter {
     animation: backdrop-enter 0.3s ease-out forwards;
@@ -104,4 +127,12 @@ select {
  
 .toast-leave {
     animation: toast-leave 0.3s ease-in forwards;
+}
+
+.card-enter {
+    animation: card-enter 0.3s ease-out forwards;
+}
+ 
+.card-leave {
+    animation: card-leave 0.3s ease-in forwards;
 }

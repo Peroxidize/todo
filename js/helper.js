@@ -1,3 +1,5 @@
+import * as components from "./components.js";
+
 export const assert = (condition, message) => {
     if (condition) {
         throw new Error(message || "Assertion failed!");
@@ -79,4 +81,15 @@ export const getTask = (id) => {
 
 export const getTasks = () => {
     return JSON.parse(localStorage.getItem("tasks"));
+};
+
+export const reRenderTask = (id) => {
+    assert(!id);
+
+    const task = getTask(id);
+    const node = document.getElementById(task.id);
+    const new_node = components.createCard(task);
+    new_node.classList.remove("card-enter");
+
+    node.replaceWith(new_node);
 };

@@ -29,16 +29,6 @@ export const createInput = (placeholder, id) => {
     return element;
 };
 
-export const createPageTitle = (title) => {
-    helper.assert(!title, "Failed creating title");
-
-    const element = document.createElement("h1");
-    element.classList = "mb-4 text-4xl font-bold";
-    element.textContent = title;
-
-    return element;
-};
-
 export const createAddTaskModal = () => {
     const form = document.createElement("form");
     form.classList = "space-y-4";
@@ -100,7 +90,7 @@ export const createAddTaskModal = () => {
         helper.addToLocalStorage(task);
         createToast("✅ Task created");
         form.reset();
-        init.renderTasks();
+        document.getElementById("task-grid").appendChild(createCard(task));
     });
 
     return createModal("Add New Task", form);
@@ -252,8 +242,13 @@ export const createCard = (obj) => {
 
     const body = document.querySelector("body");
     const card = document.createElement("div");
-    card.classList = "rounded-lg border shadow-sm mb-4 p-6";
-    card.classList += helper.compareDates(obj.date) ? " border-red-500" : "";
+    card.id = obj.id;
+    card.setAttribute("name", obj.title);
+    card.classList = "rounded-lg border shadow-sm mb-4 p-6 card-enter";
+    card.classList +=
+        helper.compareDates(obj.date) && !obj.completed
+            ? " border-red-500"
+            : "";
 
     const header = document.createElement("div");
     header.classList = "flex mb-6 items-center justify-between";
@@ -264,11 +259,12 @@ export const createCard = (obj) => {
     title.classList = "text-2xl font-semibold leading-none tracking-tight";
     title.textContent += obj.title;
 
-    header_wrapper.innerHTML += helper.compareDates(obj.date)
-        ? `
+    header_wrapper.innerHTML +=
+        helper.compareDates(obj.date) && !obj.completed
+            ? `
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-alert w-5 h-5 text-red-500 mr-2" aria-label="Overdue task"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg>
     `
-        : "";
+            : "";
     header_wrapper.appendChild(title);
 
     const priority = createPill(obj.select_priority);
@@ -287,11 +283,13 @@ export const createCard = (obj) => {
     const date = new Date(obj.date);
     const due_date = document.createElement("p");
     due_date.textContent = "Due: " + date.toLocaleDateString("en-US");
-    due_date.textContent += helper.compareDates(obj.date) ? " (Overdue)" : "";
+    due_date.textContent +=
+        helper.compareDates(obj.date) && !obj.completed ? " (Overdue)" : "";
     due_date.classList = "text-sm";
-    due_date.classList += helper.compareDates(obj.date)
-        ? " font-bold text-red-500"
-        : " text-gray-500";
+    due_date.classList +=
+        helper.compareDates(obj.date) && !obj.completed
+            ? " font-bold text-red-500"
+            : " text-gray-500";
 
     const button = createLightButton("View Details");
 
@@ -313,7 +311,8 @@ export const createCard = (obj) => {
             category,
             due_date,
             task.completed,
-            obj.id
+            obj,
+            card
         );
 
         body.appendChild(createModal("Task Details", data));
@@ -328,7 +327,8 @@ export const viewCardDetails = (
     category,
     date,
     completed,
-    id
+    obj,
+    card
 ) => {
     helper.assert(!header, "undefined ");
     helper.assert(!description, "undefined description");
@@ -348,7 +348,7 @@ export const viewCardDetails = (
     wrapper.classList = "space-y-4 content-enter";
 
     const button_wrapper = document.createElement("div");
-    button_wrapper.classList = "flex gap-2 items-center";
+    button_wrapper.classList = "flex gap-2 items-center leading-3";
 
     const checkmark_text = document.createElement("p");
     checkmark_text.textContent = "Mark as completed";
@@ -356,7 +356,7 @@ export const viewCardDetails = (
     const button_wrapper2 = button_wrapper.cloneNode(true);
     button_wrapper2.classList += " justify-end";
 
-    const checkmark_button = createCheckmarkButton(completed, id);
+    const checkmark_button = createCheckmarkButton(completed, obj);
     const close_button = createLightButton("Close");
     const delete_button = createDangerButton("Delete Task");
 
@@ -365,11 +365,14 @@ export const viewCardDetails = (
         backdrop.click();
     });
 
-    delete_button.addEventListener("click", e => {
-        helper.removeTask(id);
-        createToast("✅ Removed Task")
-
-        init.renderTasks();
+    delete_button.addEventListener("click", (e) => {
+        card.classList.remove("card-enter");
+        card.classList.add("card-leave");
+        setTimeout(() => {
+            card.remove();
+        }, 500);
+        helper.removeTask(obj.id);
+        createToast("✅ Removed Task");
 
         const backdrop = document.getElementById("modal");
         backdrop.click();
@@ -435,7 +438,7 @@ export const createDangerButton = (text) => {
     return button;
 };
 
-export const createCheckmarkButton = (completed, id) => {
+export const createCheckmarkButton = (completed, obj) => {
     helper.assert(completed === undefined);
 
     const button = document.createElement("button");
@@ -443,9 +446,10 @@ export const createCheckmarkButton = (completed, id) => {
     button.textContent = completed ? "✓" : "";
 
     button.addEventListener("click", (e) => {
-        const result = helper.setCompleted(id);
+        const result = helper.setCompleted(obj.id);
 
         button.textContent = result ? "✓" : "";
+        helper.reRenderTask(obj.id);
     });
 
     return button;
